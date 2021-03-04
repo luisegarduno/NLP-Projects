@@ -2,54 +2,53 @@
 # Created by Luis Garduno : 2/10/2021
 #
 
-def getDistance(str1, str2, idx1, idx2, deleteCost, subCostList) :
+def getDistance(X, Y, i, j, deleteCost, D):
 
-    # Return the remaining characters of other string
-    if idx1 == 0 : return idx2
-    if idx2 == 0 : return idx1
+    # Check if either of the strings are a base case, if so return value 
+    if i == 0: return j
+    if j == 0: return i
 
     # Check for recursive tree
-    if subCostList[idx1][idx2] != (-1 * deleteCost) :
-        return subCostList[idx1][idx2];
+    if D[i][j] != (-1 * deleteCost):
+        return D[i][j]
 
-    # If characters are equal, execute recursive function for (idx1 - 1) , (idx2 - 1)
-    if str1[idx1 - 1] == str2[idx2 - 1]  :
-        if subCostList[idx1 - 1][idx2 - 1] == (-1 * deleteCost) :
-            subCostList[idx1][idx2] = getDistance(str1, str2, idx1 - 1, idx2 - 1, deleteCost, subCostList)
-            return subCostList[idx1][idx2]
-        else :
-            subCostList[idx1][idx2] = subCostList[idx1 - 1][idx2 - 1]
-            return subCostList[idx1][idx2]
+    # If characters are equal, execute recursive function for (i - 1) , (j - 1)
+    if X[i - 1] == Y[j - 1]:
+        if D[i - 1][j - 1] == (-1 * deleteCost):
+            D[i][j] = getDistance(X, Y, i - 1, j - 1, deleteCost, D)
+            return D[i][j]
+        else:
+            D[i][j] = D[i - 1][j - 1]
+            return D[i][j]
 
-    # If characters are nt equal, Find the minimum cost using one of the 3 operations
-    else :
-        if subCostList[idx1 - 1][idx2] != (-1 * deleteCost) :
-            m1 = subCostList[idx1 - 1][idx2]
-        else :
-            m1 = getDistance(str1, str2, idx1 - 1, idx2, deleteCost, subCostList)
+    # If characters aren't equal, find the minimum cost using one of the 3 options 
+    else:
+        # Option 1 -----------> D(i - 1, j) + 1 
+        if D[i - 1][j] != (-1 * deleteCost):
+            m1 = D[i - 1][j]
+        else:
+            m1 = getDistance(X, Y, i - 1, j, deleteCost, D)
 
-        if subCostList[idx1][idx2 - 1] != (-1 * deleteCost) :
-            m2 = subCostList[idx1][idx2 - 1]
-        else :
-            m2 = getDistance(str1, str2, idx1, idx2 - 1, deleteCost, subCostList)
+        # Option 2 -----------> D(i, j - 1) + 1 
+        if D[i][j - 1] != (-1 * deleteCost):
+            m2 = D[i][j - 1]
+        else:
+            m2 = getDistance(X, Y, i, j - 1, deleteCost, D)
 
-        if subCostList[idx1 - 1][idx2 - 1] != (-1 * deleteCost) :
-            m3 = subCostList[idx1 - 1][idx2 - 1]
-        else :
-            m3 = getDistance(str1, str2, idx1 - 1, idx2 - 1, deleteCost, subCostList)
+        # Option 3 -----------> D(i - 1, j - 1) + 
+        if D[i - 1][j - 1] != (-1 * deleteCost):
+            m3 = D[i - 1][j - 1]
+        else:
+            m3 = getDistance(X, Y, i - 1, j - 1, deleteCost, D)
 
-        subCostList[idx1][idx2] = deleteCost  + min(m1, min(m2, m3))
-        return subCostList[idx1][idx2]
+        D[i][j] = deleteCost + min(m1, min(m2, m3))
+        return D[i][j]
 
 
 def editDistance(str1, str2, deleteCost=1, defaultSubCost=2, subCostList={}):
     # Make both strings lowercase
     str1 = str1.lower()
     str2 = str2.lower()
-
-    #deleteCost = deleteCost
-    #defaultSubCost = defaultSubCost
-    #subCostList = subCostList
 
     subCostList = [[(-1 * deleteCost) for i in range(len(str2) + 1)] for j in range(len(str1) + 1)]
 
