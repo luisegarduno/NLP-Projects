@@ -41,6 +41,7 @@ def getDistance(X, Y, i, j, deleteCost, D):
         else:
             m3 = getDistance(X, Y, i - 1, j - 1, deleteCost, D)
 
+        # Get minimum value
         D[i][j] = deleteCost + min(m1, min(m2, m3))
         return D[i][j]
 
@@ -50,9 +51,9 @@ def editDistance(str1, str2, deleteCost=1, defaultSubCost=2, subCostList={}):
     str1 = str1.lower()
     str2 = str2.lower()
 
-    subCostList = [[(-1 * deleteCost) for i in range(len(str2) + 1)] for j in range(len(str1) + 1)]
+    subCostList = [[(-1 * defaultSubCost) for i in range(len(str2) + 1)] for j in range(len(str1) + 1)]
 
-    return getDistance(str1, str2, len(str1), len(str2), deleteCost, subCostList)
+    return getDistance(str1, str2, len(str1), len(str2), defaultSubCost, subCostList)
 
 class myDict:
 
