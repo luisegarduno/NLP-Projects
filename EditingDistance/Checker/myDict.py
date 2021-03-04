@@ -50,7 +50,6 @@ def editDistance(str1, str2, deleteCost=1, defaultSubCost=2, subCostList={}):
     str1 = str1.lower()
     str2 = str2.lower()
 
-    # Create a distance matrix distance [n + 1, m + 1]
     subCostList = [[(-(deleteCost) * defaultSubCost) for i in range(len(str2) + 1)] for j in range(len(str1) + 1)]
 
     return getDistance(str1, str2, len(str1), len(str2), defaultSubCost, subCostList)
