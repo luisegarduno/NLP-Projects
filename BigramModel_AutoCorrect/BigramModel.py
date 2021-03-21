@@ -1,36 +1,46 @@
-def parseList(wordList):
-    print("hi")
+import os
 
 class BigramModel:
+
+    corpus_files = []
+
 # -----------------------------------------------------------------------------------------------------
 
     def __init__(self, name="default", dirName='.', ext='*', smooth=0, stopWordList=[], otherWordList=[]):
 
-        # name: name of the model. The name is used as the filename to store the model
+        # - Name of the model. The name is used as the filename to store the model.
         self.name = name
 
-        # - Directory that stores the corpus.
-        # - If 'dirName' starts w/ “/”, then dirName is an absolute path.
-        # - Otherwise the path is relative starting from the curr dir. (Default=current dir)
+        # - Directory that stores the corpus. Default is current directory
+        #    if 'dirName'[0] == '/': 'dirName' = an absolute path.
+        #    else: path is relative starting from the currrent directory.
         self.dirName = dirName
 
         # - The extension of all files that is consider part of the corpus.
-        # - Only files that have the specified extension will be read & processed.
-        # - Default = “*’, which mean all files in the directory will be considered
+        # - Default = '*' (all files in directory are considered)
         self.ext = ext
+        if self.ext[0] == '*': self.corpus_files = [x for x in os.listdir(self.dirName)]
+        else: self.corpus_files = [x for x in os.listdir(self.dirName) if x.endswith(self.ext)]
 
-        # - The smoothing method that is used.
-        # - Default Is no smoothing.
+        # - The smoothing method that is used. Default = No smoothing.
         # - If smooth is a floating point number between 0 & 1 (strictly > 0, <= 1), then we apply add-k smoothing to the bigram probability.
         self.smooth = smooth
 
-        # - List of words that will be removed from the corpus before calculating the bigram probability.
-        # - Default is empty
-        self.stopWordList = stopWordList
+        # - List of words that'll be removed from the corpus before calculating the bigram probability. Default = empty
+        self.stopWordList = [x.lower() for x in stopWordList]
 
         # - List of words that will be grouped & treated as a single word for calculating bigrams probabilities. 
-        self.otherWordList = otherWordList
+        self.otherWordList = [y.lower() for y in otherWordList]
 
+
+# -----------------------------------------------------------------------------------------------------
+
+    def print(self):
+        print('\n*--------------------------------*')
+        print(" - Name:", self.name, "\n - Directory:", self.dirName, "\n - Extension:", self.ext, "\n - SmoothMethod:", self.smooth)
+        print('\n - Valid Files: ', self.corpus_files)
+        print('\n - StopWords:', self.stopWordList)
+        print('*--------------------------------*')
 
 # -----------------------------------------------------------------------------------------------------
 
