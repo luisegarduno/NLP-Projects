@@ -1,25 +1,29 @@
 from BigramModel import *
 
-# name = ""
-# dirName = '.'
-# ext = '*'
-# smooth = 0
-# stopWordList = []
-# otherWordList = []
 
-# Version 1
-# stopWords_File = open('StopWords.txt', 'r')
-# stopWords = stopWords_File.read().lower().split()
-# stopWords_File.close()
+# ----------------------------------------------------------------------------------------------
 
-# Version 2
-# from numpy import loadtxt
-# lines = loadtxt("StopWords.txt", dtype=str, comments="#", delimiter="\n", unpack=False)
+params = False
 
-# Version 3
+# DISABLE Parameters
+name = ""
+dirName = '.'
+ext = '*'
+smooth = 0
 stopWords = []
-stopWordsFile = open('StopWords.txt', 'r')
-for line in stopWordsFile: stopWords.append(str(line.strip()).lower())
+otherWordList = []
+
+# ENABLE Parameters
+if not params:
+    # Stop Words
+    stopWords = []
+    stopWordsFile = open('StopWords.txt', 'r')
+    for line in stopWordsFile: stopWords.append(str(line.strip()).lower())
+
+# ----------------------------------------------------------------------------------------------
+
+
+
 
 b = BigramModel(name="", dirName='.', ext='*', smooth=0, stopWordList=stopWords, otherWordList=[])
 b.Calculate()
