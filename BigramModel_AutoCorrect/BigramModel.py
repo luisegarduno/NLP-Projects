@@ -68,7 +68,7 @@ class BigramModel:
 
     def getProb(self, w1, w2):
         # - Return the probability of the bigram (w1, w2).
-        # - If either of the word is in the corpus, it'll return -1.
+        # - If either of the word is NOT in the corpus, it'll return -1.
         print("--> getProb(self, w1, w2)")
 
 # -----------------------------------------------------------------------------------------------------
