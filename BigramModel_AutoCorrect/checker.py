@@ -36,7 +36,7 @@ b = BigramModel(name=name, dirName=dirName, ext=ext, smooth=smooth, stopWordList
 b.Calculate()
 b.Save()
 b.Load()
-b.getProb("word1", "word2")
+b.getProb("ate", "apple")
 b.getProbList("word1", sortMethod=0)
 b.getAll(sortMethod=0)
 # b.print()
