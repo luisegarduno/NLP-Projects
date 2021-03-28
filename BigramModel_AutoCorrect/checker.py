@@ -22,8 +22,8 @@ otherWordList = []
 # ENABLE Parameters - False
 if not params:
     name = "Bigram"
-    dirName = '/home/blurry/Desktop'
-    ext = '*'
+    dirName = 'test'
+    ext = '.txt'
     smooth = 0
     stopWords = []
     stopWordsFile = open('StopWords.txt', 'r')
@@ -39,5 +39,4 @@ b.Load()
 b.getProb("word1", "word2")
 b.getProbList("word1", sortMethod=0)
 b.getAll(sortMethod=0)
-
-b.print()
+# b.print()
