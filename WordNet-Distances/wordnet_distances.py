@@ -3,12 +3,12 @@ from nltk.corpus import wordnet_ic
 from nltk.corpus import wordnet as wn
 
 # -------------------------------------------------------------------------
-def check(a, b):
+def check(a, b, verbose=True):
 
     # Check if length of either arrays is 0
     if len(a) == 0 or len(b) == 0:
-        if len(a) == 0: print("Path similarity: Invalid size for w1, returning...")
-        if len(b) == 0: print("Path similarity: Invalid size for w2, returning...")
+        if len(a) == 0 and verbose==True: print("Path similarity: Invalid size for w1, returning...")
+        if len(b) == 0 and verbose==True: print("Path similarity: Invalid size for w2, returning...")
         return 0
 
     else: return 1
@@ -199,6 +199,28 @@ def word_res_similarity(ic, w1, w2, pos1=None, pos2=None, option=None):
         print(f"Resnik similarity : {c}")
         return c
 
+# -------------------------------------------------------------------------
+def extra_word_path_similarity(w1, w2, pos1 = None, pos2 = None, option = None):
+    a_v, b_v = builder(w1, w2, pos1 = 'v', pos2 = 'v')
+    if check(a_v, b_v) == 0: print("VERB == 0")
+
+    a_n, b_n  = builder(w1, w2, pos1 = 'n', pos2 = 'n')
+    if check(a_n, b_n) == 0: print("NOUN == 0")
+
+    a_r, b_r = builder(w1, w2, pos1 = 'r', pos2 = 'r')
+    if check(a_r, b_r) == 0: print("ADVERB == 0")
+
+    a_a, b_a = builder(w1, w2, pos1 = 'a', pos2 = 'a')
+    if check(a_a, b_a) == 0: print("ADJECTIVE[a] == 0")
+
+    a_s, b_s  = builder(w1, w2, pos1 = 's', pos2 = 's')
+    if check(a_s, b_s) == 0: print("ADJECTIVE[s] == 0")
+
+
+# -------------------------------------------------------------------------
+def extra_word_lcs_similarity():
+    print("Hi")
+
 #################################################################################
 ############################## TESTING ##########################################
 #################################################################################
@@ -207,8 +229,8 @@ ic = wn.ic(genesis, False, 0.0)
 
 testing = "all"
 
-# Test : first
 if testing == "first" or testing == "all":
+    print("------------------ Testing : pos1='n' | pos2='n' | option='first' ------------------")
 
     """ Path Similarity """
     a = word_path_similarity(w1, w2, pos1='n', pos2='n', option="first")
@@ -222,8 +244,8 @@ if testing == "first" or testing == "all":
     """ Res Similarity """
     d = word_res_similarity(ic, w1, w2, pos1='n', pos2='n', option="first")
 
-# Test : avg
 if testing == "avg" or testing == "all":
+    print("------------------ Testing : pos1='n' | pos2='n' | option='avg' ------------------")
 
     """ Path Similarity """
     a = word_path_similarity(w1, w2, pos1='n', pos2='n', option="avg")
@@ -237,8 +259,8 @@ if testing == "avg" or testing == "all":
     """ Res Similarity """
     d = word_res_similarity(ic, w1, w2, pos1='n', pos2='n', option="avg")
 
-# Test : min
 if testing == "min" or testing == "all":
+    print("------------------ Testing : pos1='n' | pos2='n' | option='min' ------------------")
 
     """ Path Similarity """
     a = word_path_similarity(w1, w2, pos1='n', pos2='n', option="min")
