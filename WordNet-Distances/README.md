@@ -49,13 +49,13 @@ When calculating the similarity measures above, we need to calculate similarity 
 while there are hypernyms trees for other part-of-speech in Wordnet, there is no singletree that cover everything, so the calculation may not
 yield anything useful.
 
-Sp in this extra credit, you are to modify the functions above by introducingnew methods to calculate similarity of synsets.
+We will modify the functions above by introducing new methods to calculate similarity of synsets.
 
 For each of the functions in the base case, we still consider calculating the similarity of each pair of synsets. However, in this case we only
 consider synset that has the same part of speech (for adjectives, we consider _'a'_ and _'s'_ to be the same).
 
 So for every pair of synsets that have the same part of speech. We calculate the similarity value as follows:
-- If both ofthem are nouns, then we use the basic <code>path_similarity()</code>, <code>lch_similarity()</code> etc. provided by WordNet API to calculate
+- If both of them are nouns, then we use the basic <code>path_similarity()</code>, <code>lch_similarity()</code> etc. provided by WordNet API to calculate
   the similarity. Otherwise, we use the notion of derivationally related forms provided by WordNet.Derivationally related forms is something like the root
   of a word. Notice that in Wordnet API, derivationally related terms are only defined on lemmas, not synset. However, we can generate the set of
   derivationally related synsets of _a_ synset _h_ using the following set:
@@ -68,5 +68,5 @@ So for every pair of synsets that have the same part of speech. We calculate the
   
   Notice that if a (non-noun) synset does not have any derivationally related forms, you should ignore that synset in the calcualtion
 
-Your task is to modify the similarity measures defined in the base caseto account for that. You should name your functions 
+Your task is to modify the similarity measures defined in the base case to account for that. You should name your functions 
 <code>extra_word_path_similairty()</code>, <code>extra_word_lcs_similarity()</code> etc. 
