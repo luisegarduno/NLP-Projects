@@ -201,11 +201,14 @@ def word_res_similarity(ic, w1, w2, pos1=None, pos2=None, option=None):
 
 # -------------------------------------------------------------------------
 def extra_word_path_similarity(w1, w2, pos1 = None, pos2 = None, option = None):
-    a_v, b_v = builder(w1, w2, pos1 = 'v', pos2 = 'v')
-    if check(a_v, b_v) == 0: print("VERB == 0")
 
     a_n, b_n  = builder(w1, w2, pos1 = 'n', pos2 = 'n')
     if check(a_n, b_n) == 0: print("NOUN == 0")
+    else: prob_ps = word_path_similarity(w1, w2, pos1='n', pos2='n', option=option)
+
+
+    a_v, b_v = builder(w1, w2, pos1 = 'v', pos2 = 'v')
+    if check(a_v, b_v) == 0: print("VERB == 0")
 
     a_r, b_r = builder(w1, w2, pos1 = 'r', pos2 = 'r')
     if check(a_r, b_r) == 0: print("ADVERB == 0")
@@ -218,8 +221,22 @@ def extra_word_path_similarity(w1, w2, pos1 = None, pos2 = None, option = None):
 
 
 # -------------------------------------------------------------------------
-def extra_word_lcs_similarity():
-    print("Hi")
+def extra_word_lcs_similarity(w1, w2, pos1 = None, pos2 = None, option = None):
+    a_n, b_n  = builder(w1, w2, pos1 = 'n', pos2 = 'n')
+    if check(a_n, b_n) == 0: print("NOUN == 0")
+    else: prob_lcs = word_lcs_similarity(w1, w2, pos1='n', pos2='n', option=option)
+
+# -------------------------------------------------------------------------
+def extra_word_wup_similarity(w1, w2, pos1 = None, pos2 = None, option = None):
+    a_n, b_n  = builder(w1, w2, pos1 = 'n', pos2 = 'n')
+    if check(a_n, b_n) == 0: print("NOUN == 0")
+    else: prob_wup = word_wup_similarity(w1, w2, pos1='n', pos2='n', option=option)
+
+# -------------------------------------------------------------------------
+def extra_word_res_similarity(ic, w1, w2, pos1 = None, pos2 = None, option = None):
+    a_n, b_n  = builder(w1, w2, pos1 = 'n', pos2 = 'n')
+    if check(a_n, b_n) == 0: print("NOUN == 0")
+    else: word_res_similarity(ic, w1, w2, pos1='n', pos2='n', option=option)
 
 #################################################################################
 ############################## TESTING ##########################################
@@ -227,7 +244,7 @@ def extra_word_lcs_similarity():
 w1, w2 = "dog", "cat"
 ic = wn.ic(genesis, False, 0.0)
 
-testing = "all"
+testing = "none"
 
 if testing == "first" or testing == "all":
     print("------------------ Testing : pos1='n' | pos2='n' | option='first' ------------------")
