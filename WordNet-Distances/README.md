@@ -40,7 +40,7 @@ want to make use of those similarities...
   of speech of the synset 
 - <code>word_res_similarity(ic, w1, w2, pos1 = None, pos2 = None,  option = None)</code>
   
-  Similar to above, but use Resnik similarity. The first paraemeter _(ic)_ is the information content needed by the <code>res_similarity()</code> function.
+  Similar to above, but use Resnik similarity. The first parameter _(ic)_ is the information content needed by the <code>res_similarity()</code> function.
   
   
 # Part 2
