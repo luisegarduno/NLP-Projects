@@ -1,13 +1,21 @@
-from nltk.corpus import wordnet as wn
 from nltk.corpus import genesis
 from nltk.corpus import wordnet_ic
+from nltk.corpus import wordnet as wn
+
+# -------------------------------------------------------------------------
+def check(a, b):
+
+    # Check if length of either arrays is 0
+    if len(a) == 0 or len(b) == 0:
+        if len(a) == 0: print("Path similarity: Invalid size for w1, returning...")
+        if len(b) == 0: print("Path similarity: Invalid size for w2, returning...")
+        return 0
+
+    else: return 1
 
 # -------------------------------------------------------------------------
 def builder(w1, w2, pos1 = None, pos2 = None):
     a,b = [],[]
-
-    # @todo Add "A" character as option
-    # @body "A" character will combine both "a" & "s" adjective's options
 
     # If pos1 or pos2 is 'None' (empty)
     if pos1 == None or pos2 == None:
@@ -48,20 +56,12 @@ def builder(w1, w2, pos1 = None, pos2 = None):
             for i in range(len(b_s)):
                 if b_s[i].pos() == 's': b.append(b_s[i])
 
-
     return a,b
 
 # -------------------------------------------------------------------------
 def word_path_similarity(w1, w2, pos1=None, pos2=None, option=None):
-    # print("word_path_similarity ============================================")
-
     a,b = builder(w1,w2,pos1,pos2)
-
-    if len(a) == 0 or len(b) == 0:
-        if len(a) == 0: print("\tPath similarity: Invalid size for w1, returning...")
-        if len(b) == 0: print("\tPath similarity: Invalid size for w2, returning...")
-
-        return 0
+    if check(a,b) == 0: return 0
 
     else:
         # Option : First (None)
@@ -86,28 +86,19 @@ def word_path_similarity(w1, w2, pos1=None, pos2=None, option=None):
                     if p != None: c.append(p)
             c = min(c)
 
-        print(f"\tPath similarity : {c}\n")
-
+        print(f"Path similarity : {c}")
         return c
 
 # -------------------------------------------------------------------------
 def word_lcs_similarity(w1, w2, pos1=None, pos2=None, option=None):
-    # print("word_lcs_similarity ============================================")
-
-    a,b = builder(w1,w2,pos1,pos2)
     pos_flag = False
-
-    if len(a) == 0 or len(b) == 0:
-        if len(a) == 0: print("\tLch similarity: Invalid size for w1, returning...")
-        if len(b) == 0: print("\tLch similarity: Invalid size for w2, returning...")
-
-        return 0
+    a,b = builder(w1,w2,pos1,pos2)
+    if check(a,b) == 0: return 0
 
     else:
         # Option : First (None)
         if option == None or option == 'first': c = a[0].lch_similarity(b[0])
 
-        # @todo Fix 'Average' for lcs_similarity
         # Option : Average
         if option == "avg":
             c, i = 0.0, 0.0
@@ -121,7 +112,6 @@ def word_lcs_similarity(w1, w2, pos1=None, pos2=None, option=None):
                         pos_flag = True
             c /= i
 
-        # @todo Fix 'Minimum' for lcs_similarity
         # Option : Minimum
         if option == "min":
             c = []
@@ -134,23 +124,14 @@ def word_lcs_similarity(w1, w2, pos1=None, pos2=None, option=None):
                         pos_flag = True
             c = min(c)
 
-        if pos_flag == True: print("\t** Lch similarity : Ignoring pairs with mismatched pos values...")
-
-        print(f"\tLch similarity : {c}\n")
-
+        if pos_flag == True: print("** Lch similarity : Ignoring pairs with mismatched pos values...")
+        print(f"Lch similarity : {c}")
         return c
 
 # -------------------------------------------------------------------------
 def word_wup_similarity(w1, w2, pos1=None, pos2=None, option=None):
-    # print("word_wup_similarity ============================================")
-
     a,b = builder(w1,w2,pos1,pos2)
-
-    if len(a) == 0 or len(b) == 0:
-        if len(a) == 0: print("\tWup similarity: Invalid size for w1, returning...")
-        if len(b) == 0: print("\tWup similarity: Invalid size for w2, returning...")
-
-        return 0
+    if check(a,b) == 0: return 0
 
     else:
         # Option : First (None)
@@ -175,22 +156,14 @@ def word_wup_similarity(w1, w2, pos1=None, pos2=None, option=None):
                     if p != None: c.append(p)
             c = min(c)
 
-        print(f"\tWup similarity : {c}\n")
-
+        print(f"Wup similarity : {c}")
         return c
 
 # -------------------------------------------------------------------------
 def word_res_similarity(ic, w1, w2, pos1=None, pos2=None, option=None):
-    # print("word_res_similarity ============================================")
-
-    a,b = builder(w1,w2,pos1,pos2)
     pos_flag = False
-
-    if len(a) == 0 or len(b) == 0:
-        if len(a) == 0: print("\tResnik similarity: Invalid size for w1, returning...")
-        if len(b) == 0: print("\tResnik similarity: Invalid size for w2, returning...")
-
-        return 0
+    a,b = builder(w1,w2,pos1,pos2)
+    if check(a,b) == 0: return 0
 
     else:
         # Option : First (None)
@@ -222,160 +195,59 @@ def word_res_similarity(ic, w1, w2, pos1=None, pos2=None, option=None):
                         pos_flag = True
             c = min(c)
 
-        if pos_flag == True: print("\t** Resnik similarity : Ignoring pairs with mismatched pos values...")
-        print(f"\tResnik similarity : {c}\n")
-
+        if pos_flag == True: print("** Resnik similarity : Ignoring pairs with mismatched pos values...")
+        print(f"Resnik similarity : {c}")
         return c
-
 
 #################################################################################
 ############################## TESTING ##########################################
 #################################################################################
-w1 = "dog"
-w2 = "cat"
+w1, w2 = "dog", "cat"
+ic = wn.ic(genesis, False, 0.0)
 
 testing = "all"
 
-# Path Similarity : DONE ########################################################
+# Test : first
+if testing == "first" or testing == "all":
 
-""" Word Path Similarity : first (DONE) """
-if testing == "first_ps" or testing == "ps" or testing == "all":
-    a = word_path_similarity(w1, w2, option="first")
-    print(a)
-    b = word_path_similarity(w1, w2, pos1='n', option="first")
-    print(b)
-    c = word_path_similarity(w1, w2, pos2='n', option="first")
-    print(c)
-    d = word_path_similarity(w1, w2, pos1='n', pos2='n', option="first")
-    print(d)
+    """ Path Similarity """
+    a = word_path_similarity(w1, w2, pos1='n', pos2='n', option="first")
 
+    """ Lcs Similarity """
+    b = word_lcs_similarity(w1, w2, pos1='n', pos2='n', option="first")
 
-""" Word Path Similarity : avg (DONE) """
-if testing == "avg_ps" or testing == "ps" or testing == "all":
-    a = word_path_similarity(w1, w2, option="avg")
-    print(a)
-    b = word_path_similarity(w1, w2, pos1='n', option="avg")
-    print(b)
-    c = word_path_similarity(w1, w2, pos2='n', option="avg")
-    print(c)
-    d = word_path_similarity(w1, w2, pos1='n', pos2='n', option="avg")
-    print(d)
+    """ Wup Similarity """
+    c = word_wup_similarity(w1, w2, pos1='n', pos2='n', option="first")
 
-""" Word Path Similarity : min (DONE) """
-if testing == "min_ps" or testing == "ps" or testing == "all":
-    a = word_path_similarity(w1, w2, option="min")
-    print(a)
-    b = word_path_similarity(w1, w2, pos1='n', option="min")
-    print(b)
-    c = word_path_similarity(w1, w2, pos2='n', option="min")
-    print(c)
-    d = word_path_similarity(w1, w2, pos1='n', pos2='n', option="min")
-    print(d)
-
-# LCS Similarity : !Done ########################################################
-
-""" Word Lcs Similarity : first (DONE) """
-if testing == "first_lcs" or testing == "lcs" or testing == "all":
-    a = word_lcs_similarity(w1, w2, option="first")
-    print(a)
-    b = word_lcs_similarity(w1, w2, pos1='n', option="first")
-    print(b)
-    c = word_lcs_similarity(w1, w2, pos2='n', option="first")
-    print(c)
-    d = word_lcs_similarity(w1, w2, pos1='n', pos2='n', option="first")
-    print(d)
-
-""" Word Lcs Similarity : avg """
-if testing == "avg_lcs" or testing == "lcs" or testing == "all":
-    a = word_lcs_similarity(w1, w2, option="avg")
-    print(a)
-    b = word_lcs_similarity(w1, w2, pos1='n', option="avg")
-    print(b)
-    c = word_lcs_similarity(w1, w2, pos2='n', option="avg")
-    print(c)
-    d = word_lcs_similarity(w1, w2, pos1='n', pos2='n', option="avg")
-    print(d)
-
-""" Word Lcs Similarity : min """
-if testing == "min_lcs" or testing == "lcs" or testing == "all":
-    a = word_lcs_similarity(w1, w2, option="min")
-    print(a)
-    b = word_lcs_similarity(w1, w2, pos1='n', option="min")
-    print(b)
-    c = word_lcs_similarity(w1, w2, pos2='n', option="min")
-    print(c)
-    d = word_lcs_similarity(w1, w2, pos1='n', pos2='n', option="min")
-    print(d)
-
-# Wup Similarity : Done #########################################################
-
-""" Word Wup Similarity : first (DONE) """
-if testing == "first_wup" or testing == "wup" or testing == "all":
-    a = word_wup_similarity(w1, w2, option="first")
-    print(a)
-    b = word_wup_similarity(w1, w2, pos1='n', option="first")
-    print(b)
-    c = word_wup_similarity(w1, w2, pos2='n', option="first")
-    print(c)
-    d = word_wup_similarity(w1, w2, pos1='n', pos2='n', option="first")
-    print(d)
-
-""" Word Wup Similarity : avg (DONE) """
-if testing == "avg_wup" or testing == "wup" or testing == "all":
-    a = word_wup_similarity(w1, w2, option="avg")
-    print(a)
-    b = word_wup_similarity(w1, w2, pos1='n', option="avg")
-    print(b)
-    c = word_wup_similarity(w1, w2, pos2='n', option="avg")
-    print(c)
-    d = word_wup_similarity(w1, w2, pos1='n', pos2='n', option="avg")
-    print(d)
-
-""" Word Wup Similarity : min (DONE) """
-if testing == "min_wup" or testing == "wup" or testing == "all":
-    a = word_wup_similarity(w1, w2, option="min")
-    print(a)
-    b = word_wup_similarity(w1, w2, pos1='n', option="min")
-    print(b)
-    c = word_wup_similarity(w1, w2, pos2='n', option="min")
-    print(c)
-    d = word_wup_similarity(w1, w2, pos1='n', pos2='n', option="min")
-    print(d)
-
-# Res Similarity : !Done ########################################################
-
-""" Word Res Similarity : first """
-if testing == "first_res" or testing == "res" or testing == "all":
-    ic = wn.ic(genesis, False, 0.0)
-    a = word_res_similarity(ic, w1, w2, option="first")
-    print(a)
-    b = word_res_similarity(ic, w1, w2, pos1='n', option="first")
-    print(b)
-    c = word_res_similarity(ic, w1, w2, pos2='n', option="first")
-    print(c)
+    """ Res Similarity """
     d = word_res_similarity(ic, w1, w2, pos1='n', pos2='n', option="first")
-    print(d)
 
-""" Word Res Similarity : avg """
-if testing == "avg_res" or testing == "res" or testing == "all":
-    ic = wn.ic(genesis, False, 0.0)
-    a = word_res_similarity(ic, w1, w2, option="avg")
-    print(a)
-    b = word_res_similarity(ic, w1, w2, pos1='n', option="avg")
-    print(b)
-    c = word_res_similarity(ic, w1, w2, pos2='n', option="avg")
-    print(c)
+# Test : avg
+if testing == "avg" or testing == "all":
+
+    """ Path Similarity """
+    a = word_path_similarity(w1, w2, pos1='n', pos2='n', option="avg")
+
+    """ Lcs Similarity """
+    b = word_lcs_similarity(w1, w2, pos1='n', pos2='n', option="avg")
+
+    """ Wup Similarity """
+    c = word_wup_similarity(w1, w2, pos1='n', pos2='n', option="avg")
+
+    """ Res Similarity """
     d = word_res_similarity(ic, w1, w2, pos1='n', pos2='n', option="avg")
-    print(d)
 
-""" Word Res Similarity : min """
-if testing == "min_res" or testing == "res" or testing == "all":
-    ic = wn.ic(genesis, False, 0.0)
-    a = word_res_similarity(ic, w1, w2, option="min")
-    print(a)
-    b = word_res_similarity(ic, w1, w2, pos1='n', option="min")
-    print(b)
-    c = word_res_similarity(ic, w1, w2, pos2='n', option="min")
-    print(c)
+# Test : min
+if testing == "min" or testing == "all":
+
+    """ Path Similarity """
+    a = word_path_similarity(w1, w2, pos1='n', pos2='n', option="min")
+
+    """ Lcs Similarity """
+    b = word_lcs_similarity(w1, w2, pos1='n', pos2='n', option="min")
+
+    """ Wup Similarity """
+    c = word_wup_similarity(w1, w2, pos1='n', pos2='n', option="min")
+
+    """ Res Similarity """
     d = word_res_similarity(ic, w1, w2, pos1='n', pos2='n', option="min")
-    print(d)
