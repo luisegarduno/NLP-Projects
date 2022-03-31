@@ -56,11 +56,11 @@ class FreemanCrawler_Data(CrawlSpider):
 
         url_response = urlopen(response.url).read()
         soup = BeautifulSoup(url_response, "lxml")
-        updatess = soup.body.p.text
-        print(updatess)
-        if str(soup.body.p.text).find("Last Updated") != -1:
-            dater = str(soup.body.p).find("Last Updated");
-            print(dater)
+        # updatess = soup.body.p.text
+        # print(updatess)
+        # if str(soup.body.p.text).find("Last Updated") != -1:
+        #     dater = str(soup.body.p).find("Last Updated");
+        #     print(dater)
         # updated = soup.body.p.textfindAll("p")
 
         # if str(updated).find("Last Updated"):
