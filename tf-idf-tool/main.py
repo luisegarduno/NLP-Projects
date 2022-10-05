@@ -43,7 +43,6 @@ clr()
 docs = []
 sent = input("Please enter a sentence/string: ")
 docs.append(sent)
-showDict(docs)
 
 init_res = "y"
 while init_res.lower() != "n" and init_res.lower() == "y":
@@ -59,3 +58,17 @@ while init_res.lower() != "n" and init_res.lower() == "y":
         clr()
 
 showDict(docs)
+
+# ================================
+# Todo - See https://github.com/luisegarduno/MachineLearning_SummerPlan/blob/master/DocumentAnalysis.ipynb
+
+from sklearn.feature_extraction.text import CountVectorizer
+
+count_vec = CountVectorizer()
+
+bag_words = count_vec.fit_transform(docs)
+print("Shape: ", bag_words.shape)
+print(bag_words[0])
+
+print("Size of vocabulary: ", len(count_vec.vocabulary_))
+print(count_vec.vocabulary_)
