@@ -1,9 +1,9 @@
-import sys
-import time
+# import sys
+# import time
 import os.path
-import subprocess
+# import subprocess
 import numpy as np
-import pandas as pd
+# import pandas as pd
 
 # Current working directory
 cwd = os.path.dirname(os.path.realpath(__file__))
@@ -67,8 +67,37 @@ from sklearn.feature_extraction.text import CountVectorizer
 count_vec = CountVectorizer()
 
 bag_words = count_vec.fit_transform(docs)
-print("Shape: ", bag_words.shape)
-print(bag_words[0])
+vocab = count_vec.get_feature_names_out()
+print("Vocabulary:\n", vocab) 
+print("==============================================\n")
 
-print("Size of vocabulary: ", len(count_vec.vocabulary_))
-print(count_vec.vocabulary_)
+
+
+
+print("Raw Frequency (TF)")
+transposed_array = np.transpose(bag_words.toarray())
+for i in range(len(vocab)):
+    print(vocab[i], "\t", transposed_array[i])
+
+
+
+
+
+print("\nInverse Frequency (IDF)")
+# total number (N) of words
+#N = transposed_array.sum()
+N = len(docs)
+# total number (n) of times word (i) appears
+n_i = transposed_array.sum(axis=1)
+idf_in = np.log2(N / n_i)
+for idf in range(len(vocab)):
+    print(vocab[idf], "\t", idf_in[idf])
+
+
+# print(bag_words.toarray())
+
+# print("Shape: ", bag_words.shape)
+# print(bag_words[0])
+
+# print("Size of vocabulary: ", len(count_vec.vocabulary_))
+# print(count_vec.vocabulary_)
