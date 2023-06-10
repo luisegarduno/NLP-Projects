@@ -3,7 +3,9 @@
 import os.path
 # import subprocess
 import numpy as np
-# import pandas as pd
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 
 # Current working directory
 cwd = os.path.dirname(os.path.realpath(__file__))
@@ -58,40 +60,66 @@ while init_res.lower() != "n" and init_res.lower() == "y":
         clr()
 
 showDict(docs)
+print(docs)
 
 # ================================
 # Todo - See https://github.com/luisegarduno/MachineLearning_SummerPlan/blob/master/DocumentAnalysis.ipynb
 
 from sklearn.feature_extraction.text import CountVectorizer
-
 count_vec = CountVectorizer()
 
 bag_words = count_vec.fit_transform(docs)
 vocab = count_vec.get_feature_names_out()
+transposed_array = np.transpose(bag_words.toarray())
 print("Vocabulary:\n", vocab) 
 print("==============================================\n")
 
 
 
+def tf_RawFrequency(transposed_array):
+    print("[TF] Raw Frequency (f_ij)")
+    for i in range(len(vocab)):
+        print(vocab[i], "\t", transposed_array[i])
+    print("==============================================\n")
 
-print("Raw Frequency (TF)")
-transposed_array = np.transpose(bag_words.toarray())
-for i in range(len(vocab)):
-    print(vocab[i], "\t", transposed_array[i])
+def tf_LogNormalization(transposed_array):
+    print("[TF] Log Normalization (1 + log2(f_ij))")
+    for i in range(len(vocab)):
+
+        for j in range(len(transposed_array[i])):
+            if transposed_array[i][j] != 0:
+                transposed_array[i][j] = 1 + np.log2(transposed_array[i][j])
+
+        print(vocab[i], "\t", transposed_array[i])
+    print("==============================================\n")
 
 
 
+def idf(transposed_array):
+    print("\nInverse Frequency (IDF)")
+    # total number (N) of words
+    # N = transposed_array.sum()
+    N = len(docs)
+    # total number (n) of times word (i) appears
+    n_i = transposed_array.sum(axis=1)
+
+    idf_i = np.log2(N / n_i)
+    for idf in range(len(vocab)):
+        print(vocab[idf], "\t", idf_i[idf])
+    print("==============================================\n")
 
 
-print("\nInverse Frequency (IDF)")
-# total number (N) of words
-#N = transposed_array.sum()
-N = len(docs)
-# total number (n) of times word (i) appears
-n_i = transposed_array.sum(axis=1)
-idf_in = np.log2(N / n_i)
-for idf in range(len(vocab)):
-    print(vocab[idf], "\t", idf_in[idf])
+
+def tf_idf_vector():
+    tfidf_vect = TfidfVectorizer()
+    tfidf_mat = tfidf_vect.fit_transform(docs)
+    #print(tfidf_mat)
+    print("==============================================\n")
+    df = pd.DataFrame(data=tfidf_mat.toarray(), columns=tfidf_vect.get_feature_names_out())
+    print(df)
+
+tf_RawFrequency(transposed_array)
+tf_LogNormalization(transposed_array.astype(float))
 
 
 # print(bag_words.toarray())
