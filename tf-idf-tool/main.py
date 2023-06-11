@@ -1,4 +1,4 @@
-# import sys
+import sys
 # import time
 import os.path
 # import subprocess
@@ -60,7 +60,6 @@ while init_res.lower() != "n" and init_res.lower() == "y":
         clr()
 
 showDict(docs)
-print(docs)
 
 # ================================
 # Todo - See https://github.com/luisegarduno/MachineLearning_SummerPlan/blob/master/DocumentAnalysis.ipynb
@@ -71,16 +70,19 @@ count_vec = CountVectorizer()
 bag_words = count_vec.fit_transform(docs)
 vocab = count_vec.get_feature_names_out()
 transposed_array = np.transpose(bag_words.toarray())
-print("Vocabulary:\n", vocab) 
-print("==============================================\n")
+
+def printVocab():
+    print("Vocabulary:\n", vocab) 
+    print("==============================================\n")
 
 
-
-def tf_RawFrequency(transposed_array):
+def tf_RawFrequency():
     print("[TF] Raw Frequency (f_ij)")
     for i in range(len(vocab)):
         print(vocab[i], "\t", transposed_array[i])
     print("==============================================\n")
+
+    nextMove()
 
 def tf_LogNormalization(transposed_array):
     print("[TF] Log Normalization (1 + log2(f_ij))")
@@ -93,9 +95,9 @@ def tf_LogNormalization(transposed_array):
         print(vocab[i], "\t", transposed_array[i])
     print("==============================================\n")
 
+    nextMove()
 
-
-def idf(transposed_array):
+def idf_InverseFrequency():
     print("\nInverse Frequency (IDF)")
     # total number (N) of words
     # N = transposed_array.sum()
@@ -108,19 +110,58 @@ def idf(transposed_array):
         print(vocab[idf], "\t", idf_i[idf])
     print("==============================================\n")
 
-
+    nextMove()
 
 def tf_idf_vector():
     tfidf_vect = TfidfVectorizer()
     tfidf_mat = tfidf_vect.fit_transform(docs)
-    #print(tfidf_mat)
-    print("==============================================\n")
+    # print(tfidf_mat)
     df = pd.DataFrame(data=tfidf_mat.toarray(), columns=tfidf_vect.get_feature_names_out())
     print(df)
+    print("==============================================\n")
 
-tf_RawFrequency(transposed_array)
-tf_LogNormalization(transposed_array.astype(float))
+    nextMove()
 
+def nextMove():
+    option = input("\nReturn to MainMenu ('y') or Exit ('q')? ")
+    if option == 'y':
+        clr()
+        showDict(docs)
+        printMenu()
+    if option == 'q':
+        sys.exit()
+    else:
+        print("Invalid option")
+
+def printMenu():
+    option = ''
+    print("Available Statistics:")
+    print("1. [TF] Raw Frequency")
+    print("2. [TF] Log Normalization")
+    print("3. [IDF] Inverse Frequency")
+    print("4. TF-IDF")
+    print("q - quit")
+    option = input("\nChoose a statistic to view (1-4):")
+
+    clr()
+    showDict(docs)
+
+    if option == '1':
+        tf_RawFrequency()
+    if option == '2':
+        tf_LogNormalization(transposed_array.astype(float))
+    if option == '3':
+        idf_InverseFrequency()
+    if option == '4':
+        tf_idf_vector()
+    if option == 'q' or option == 'n':
+        sys.exit()
+    else:
+        clr()
+        showDict(docs)
+        print("Invalid option\n\n")
+
+printMenu()
 
 # print(bag_words.toarray())
 
